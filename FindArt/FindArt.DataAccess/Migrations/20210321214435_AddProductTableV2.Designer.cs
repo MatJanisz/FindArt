@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FindArt.DataAccess.Migrations
 {
     [DbContext(typeof(FindArtDbContext))]
-    [Migration("20210321204402_AddRoles")]
-    partial class AddRoles
+    [Migration("20210321214435_AddProductTableV2")]
+    partial class AddProductTableV2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,29 @@ namespace FindArt.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("FindArt.Core.Models.Product", b =>
+                {
+                    b.Property<string>("ID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("OwnerID");
+
+                    b.ToTable("Products");
+                });
 
             modelBuilder.Entity("FindArt.Core.Models.User", b =>
                 {
@@ -118,15 +141,6 @@ namespace FindArt.DataAccess.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "5a069a60-d931-4ad5-a068-0062d5ea99c6",
-                            ConcurrencyStamp = "bb4c30dc-d528-48c6-b208-b56d6428d19c",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -233,6 +247,15 @@ namespace FindArt.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("FindArt.Core.Models.Product", b =>
+                {
+                    b.HasOne("FindArt.Core.Models.User", "Owner")
+                        .WithMany("ProductsOnAuction")
+                        .HasForeignKey("OwnerID");
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -282,6 +305,11 @@ namespace FindArt.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FindArt.Core.Models.User", b =>
+                {
+                    b.Navigation("ProductsOnAuction");
                 });
 #pragma warning restore 612, 618
         }
