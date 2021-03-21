@@ -1,9 +1,7 @@
 ﻿using FindArt.Core.Models;
+using FindArt.DataAccess.Configuration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FindArt.DataAccess
 {
@@ -14,7 +12,10 @@ namespace FindArt.DataAccess
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			base.OnModelCreating(modelBuilder);
 
+			modelBuilder.ApplyConfiguration(new UserConfiguration());
+			modelBuilder.ApplyConfiguration(new RolesConfiguration());
 		}
 	}
 }
