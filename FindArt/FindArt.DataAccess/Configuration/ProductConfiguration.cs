@@ -22,6 +22,13 @@ namespace FindArt.DataAccess.Configuration
 				.HasOne(b => b.Owner)
 				.WithMany(b => b.ProductsOnAuction)
 				.HasForeignKey(b => b.OwnerID);
+
+			//one to many relation between Product and ProductType
+			modelBuilder
+				.HasOne(b => b.ProductType)
+				.WithMany(b => b.Products)
+				.HasForeignKey(b => b.ProductTypeID);
+
 		}
 	}
 }

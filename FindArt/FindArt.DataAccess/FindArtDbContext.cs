@@ -10,6 +10,7 @@ namespace FindArt.DataAccess
 		public FindArtDbContext(DbContextOptions options)
         : base(options) {}
 
+		public DbSet<ProductType> ProductTypes { get; set; }
 		public DbSet<Product> Products { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -18,6 +19,7 @@ namespace FindArt.DataAccess
 
 			modelBuilder.ApplyConfiguration(new UserConfiguration());
 			//modelBuilder.ApplyConfiguration(new RolesConfiguration());
+			modelBuilder.ApplyConfiguration(new ProductTypeConfiguration());
 			modelBuilder.ApplyConfiguration(new ProductConfiguration());
 
 		}

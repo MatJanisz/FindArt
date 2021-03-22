@@ -13,5 +13,8 @@ namespace FindArt.Core.Models
 		public string Description { get; set; }
 		public string OwnerID { get; set; }
 		public User Owner { get; set; } //one-to-many
+		public ProductTypeID ProductTypeID { get; set; } //nav property
+		public ProductType ProductType { get; set; }
+
 	}
 }
