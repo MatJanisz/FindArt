@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FindArt.Core.Models
 {
@@ -10,5 +11,6 @@ namespace FindArt.Core.Models
 		public bool Active { get; set; }
 		public string ProductID { get; set; }
 		public Product Product { get; set; } //one to one
+		public List<Offer> AuctionOffers { get; set; } 
 	}
 }

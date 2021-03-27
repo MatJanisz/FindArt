@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace FindArt.Core.Models
 {
 	public class Product
@@ -15,6 +10,8 @@ namespace FindArt.Core.Models
 		public User Owner { get; set; } //one-to-many
 		public ProductTypeID ProductTypeID { get; set; } //nav property
 		public ProductType ProductType { get; set; }
+		public string AuctionID { get; set; }
+		public Auction Auction { get; set; } //one-to-one
 
 	}
 }

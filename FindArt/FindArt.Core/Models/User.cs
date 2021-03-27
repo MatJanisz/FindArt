@@ -9,5 +9,6 @@ namespace FindArt.Core.Models
 		public string LastName { get; set; }
 		//user's products on auction
 		public List<Product> ProductsOnAuction { get; set; } //one-to-many
+		public List<Offer> SubmittedOffers { get; set; } //one-to-many
 	}
 }

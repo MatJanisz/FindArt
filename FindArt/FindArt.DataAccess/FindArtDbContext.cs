@@ -12,6 +12,10 @@ namespace FindArt.DataAccess
 
 		public DbSet<ProductType> ProductTypes { get; set; }
 		public DbSet<Product> Products { get; set; }
+		public DbSet<Auction> Auctions { get; set; }
+		public DbSet<Offer> Offers { get; set; }
+
+
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -21,6 +25,8 @@ namespace FindArt.DataAccess
 			//modelBuilder.ApplyConfiguration(new RolesConfiguration());
 			modelBuilder.ApplyConfiguration(new ProductTypeConfiguration());
 			modelBuilder.ApplyConfiguration(new ProductConfiguration());
+			modelBuilder.ApplyConfiguration(new AuctionConfiguration());
+			modelBuilder.ApplyConfiguration(new OfferConfiguration());
 
 		}
 	}
