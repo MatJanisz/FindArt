@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FindArt.Core\FindArt.Core.csproj" />
+    <ProjectReference Include="..\FindArt.DataAccess\FindArt.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>

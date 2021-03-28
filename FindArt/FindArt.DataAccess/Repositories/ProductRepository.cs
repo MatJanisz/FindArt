@@ -22,5 +22,11 @@ namespace FindArt.DataAccess
 		public async Task<Product> GetProductAsync(string id, bool trackChanges) =>
 			await FindByCondition(p => p.ID.Equals(id), trackChanges)
 			.SingleOrDefaultAsync();
+
+		public void CreateProduct(Product product) => Create(product);
+
+		public void DeleteProduct(Product product) => Delete(product);
+
+		public void UpdateProduct(Product product) => Update(product);
 	}
 }
