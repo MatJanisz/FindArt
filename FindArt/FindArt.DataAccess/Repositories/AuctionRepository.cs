@@ -30,5 +30,11 @@ namespace FindArt.DataAccess
 			auction.ProductID = productID;
 			Update(auction);
 		}
+
+		public void CreateAuction(Auction auction) => Create(auction);
+
+		public void DeleteAuction(Auction auction) => Delete(auction);
+
+		public void UpdateAuction(Auction auction) => Update(auction);
 	}
 }

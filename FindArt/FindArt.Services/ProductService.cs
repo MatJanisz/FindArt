@@ -1,4 +1,6 @@
-﻿using FindArt.Core.Interfaces.Repositories.Base;
+﻿using AutoMapper;
+using FindArt.Core.DataTransferObjects.Product;
+using FindArt.Core.Interfaces.Repositories.Base;
 using FindArt.Core.Interfaces.Services;
 using FindArt.Core.Models;
 using System;
@@ -12,36 +14,45 @@ namespace FindArt.Services
 	public class ProductService : IProductService
 	{
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IMapper _mapper;
 
-		public ProductService(IUnitOfWork unitOfWork)
+		public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
+			_mapper = mapper;
 		}
 
-		public async Task<IEnumerable<Product>> GetAllProduct()
+		public async Task<IEnumerable<ProductDto>> GetAllProduct()
 		{
-			return await _unitOfWork.Product.GetAllProductsAsync(trackChanges: false);
+			var products = await _unitOfWork.Product.GetAllProductsAsync(trackChanges: false);
+			return _mapper.Map<IEnumerable<ProductDto>>(products);
 		}
 
-		public async Task<Product> GetProduct(string id)
+		public async Task<ProductDto> GetProduct(string id)
 		{
-			return await _unitOfWork.Product.GetProductAsync(id, trackChanges: false);
+			var product = await _unitOfWork.Product.GetProductAsync(id, trackChanges: false);
+			return _mapper.Map<ProductDto>(product);
 		}
 
-		public void CreateProduct(Product product)
+		public async Task CreateProduct(ProductDto productDto)
 		{
+			var product = _mapper.Map<Product>(productDto);
 			_unitOfWork.Product.CreateProduct(product);
+			await _unitOfWork.SaveAsync();
 		}
 
-		public void UpdateProduct(Product product)
+		public async Task UpdateProduct(Product productDto)
 		{
+			var product = _mapper.Map<Product>(productDto);
 			_unitOfWork.Product.UpdateProduct(product);
+			await _unitOfWork.SaveAsync();
 		}
 
-		public void DeleteProduct(Product product)
+		public async Task DeleteProduct(Product productDto)
 		{
+			var product = _mapper.Map<Product>(productDto);
 			_unitOfWork.Product.DeleteProduct(product);
+			await _unitOfWork.SaveAsync();
 		}
-
 	}
 }

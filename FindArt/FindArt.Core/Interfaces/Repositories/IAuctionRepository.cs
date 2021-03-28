@@ -12,5 +12,10 @@ namespace FindArt.Core.Interfaces.Repositories
 		void AssignProductToAuction(string productID, string auctionID);
 		Task<IEnumerable<Auction>> GetAllAuctionsAsync(bool trackChanges);
 		Task<Auction> GetAuctionAsync(string id, bool trackChanges);
+		public void CreateAuction(Auction auction);
+
+		public void DeleteAuction(Auction auction);
+
+		public void UpdateAuction(Auction auction);
 	}
 }
