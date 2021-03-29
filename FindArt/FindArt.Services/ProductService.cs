@@ -3,6 +3,7 @@ using FindArt.Core.DataTransferObjects.Product;
 using FindArt.Core.Interfaces.Repositories.Base;
 using FindArt.Core.Interfaces.Services;
 using FindArt.Core.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,14 @@ namespace FindArt.Services
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;
+		private readonly ILogger<IProductService> _logger;
 
-		public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
+
+		public ProductService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<IProductService> logger)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
+			_logger = logger;
 		}
 
 		public async Task<IEnumerable<ProductDto>> GetAllProduct()

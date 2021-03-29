@@ -3,20 +3,23 @@ using FindArt.Core.DataTransferObjects.Auction;
 using FindArt.Core.Interfaces.Repositories.Base;
 using FindArt.Core.Interfaces.Services;
 using FindArt.Core.Models;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FindArt.Services
 {
-	public class AuctionService : IAuctionService, IAuctionService
+	public class AuctionService : IAuctionService
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IMapper _mapper;
+		private readonly ILogger<IAuctionService> _logger;
 
-		public AuctionService(IUnitOfWork unitOfWork, IMapper mapper)
+		public AuctionService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<IAuctionService> logger)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
+			_logger = logger;
 		}
 
 		public async Task<IEnumerable<AuctionDto>> GetAllProduct()
