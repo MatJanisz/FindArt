@@ -1,4 +1,5 @@
 using FindArt.Api.Extensions;
+using FindArt.Core;
 using FindArt.Root;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,21 +27,31 @@ namespace FindArt.Api
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddCors(options =>
+			{
+				options.AddPolicy("CorsPolicy", builder =>
+					builder.AllowAnyOrigin()
+					.AllowAnyMethod()
+					.AllowAnyHeader());
+			});
+
 			services.ConfigureSqlContext(Configuration);
 			services.ConfigureIdentity();
+			services.AddAutoMapper(typeof(MappingProfile));
+			services.InjectAllServices();
 
 			services.AddControllers();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger logger)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 			}
 
-			app.ConfigureExceptionHandler(logger);
+			app.ConfigureExceptionHandler();
 
 			app.UseRouting();
 

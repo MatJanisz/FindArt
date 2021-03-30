@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using System.Net;
 
 namespace FindArt.Api.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {
-        public static void ConfigureExceptionHandler(this IApplicationBuilder app, ILogger logger)
+        public static void ConfigureExceptionHandler(this IApplicationBuilder app)
         {
             app.UseExceptionHandler(appError =>
             {
@@ -21,7 +21,7 @@ namespace FindArt.Api.Extensions
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
                     {
-                        logger.LogError($"Something went wrong: {contextFeature.Error}");
+                        Log.Error($"Something went wrong: {contextFeature.Error}");
 
                         await context.Response.WriteAsync(new ErrorDetails()
                         {

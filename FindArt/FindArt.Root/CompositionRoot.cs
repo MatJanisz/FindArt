@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using FindArt.Core.Models;
 using Microsoft.AspNetCore.Identity;
+using FindArt.Core.Interfaces.Services;
+using FindArt.Services;
 
 namespace FindArt.Root
 {
@@ -29,5 +31,10 @@ namespace FindArt.Root
             builder.AddEntityFrameworkStores<FindArtDbContext>();
                 //.AddDefaultTokenProviders();
         }
+
+        public static void InjectAllServices(this IServiceCollection services)
+		{
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+		}
     }
 }

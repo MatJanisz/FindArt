@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FindArt.Core.DataTransferObjects.Auction;
 using FindArt.Core.DataTransferObjects.Product;
+using FindArt.Core.DataTransferObjects.User;
 using FindArt.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,11 @@ namespace FindArt.Core
 				.ReverseMap();
 
 			CreateMap<Auction, AuctionDto>().ReverseMap();
+
+			CreateMap<UserRegistrationDto, User>();
+
+			CreateMap<UserAuthenticationDto, User>();
+
 		}
 	}
 }
