@@ -6,5 +6,6 @@ namespace FindArt.Core.Interfaces.Services
 	public interface IAuthenticationService
 	{
 		Task<bool> ValidateUser(UserAuthenticationDto userForAuth);
+		Task<string> CreateToken();
 	}
 }

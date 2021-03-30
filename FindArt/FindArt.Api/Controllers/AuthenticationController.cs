@@ -49,5 +49,17 @@ namespace FindArt.Api.Controllers
             return StatusCode(201);
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Authenticate([FromBody] UserAuthenticationDto user)
+        {
+            if (!await _authenticationService.ValidateUser(user))
+            {
+                _logger.LogWarning($"{nameof(Authenticate)}: Authentication failed. Wrong user name or password.");
+                return Unauthorized();
+            }
+
+            return Ok(new { Token = await _authenticationService.CreateToken() });
+        }
+
     }
 }

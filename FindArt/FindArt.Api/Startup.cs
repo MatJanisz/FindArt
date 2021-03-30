@@ -36,8 +36,15 @@ namespace FindArt.Api
 			});
 
 			services.ConfigureSqlContext(Configuration);
-			services.ConfigureIdentity();
+
 			services.AddAutoMapper(typeof(MappingProfile));
+
+			services.AddAuthentication();
+
+			services.ConfigureIdentity();
+
+			services.ConfigureJWT(Configuration);
+
 			services.InjectAllServices();
 
 			services.AddControllers();
@@ -53,7 +60,11 @@ namespace FindArt.Api
 
 			app.ConfigureExceptionHandler();
 
+			app.UseCors("CorsPolicy");
+
 			app.UseRouting();
+
+			app.UseAuthentication();
 
 			app.UseAuthorization();
 

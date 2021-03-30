@@ -22,7 +22,7 @@ namespace FindArt.DataAccess
 			base.OnModelCreating(modelBuilder);
 
 			modelBuilder.ApplyConfiguration(new UserConfiguration());
-			//modelBuilder.ApplyConfiguration(new RolesConfiguration());
+			modelBuilder.ApplyConfiguration(new RolesConfiguration());
 			modelBuilder.ApplyConfiguration(new ProductTypeConfiguration());
 			modelBuilder.ApplyConfiguration(new ProductConfiguration());
 			modelBuilder.ApplyConfiguration(new AuctionConfiguration());
