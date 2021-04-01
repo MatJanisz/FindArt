@@ -22,5 +22,11 @@ namespace FindArt.Api.Controllers
 		{
 			return Ok();
 		}
+
+		[HttpGet("testAuthorizeAdmin"), Authorize(Roles = "Administrator")]
+		public IActionResult TestAuthorizeAdmin()
+		{
+			return Ok();
+		}
 	}
 }
