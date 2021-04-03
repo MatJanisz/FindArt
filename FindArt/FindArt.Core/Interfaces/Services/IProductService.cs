@@ -11,6 +11,6 @@ namespace FindArt.Core.Interfaces.Services
 		Task DeleteProduct(Product productDto);
 		Task<IEnumerable<ProductDto>> GetAllProduct();
 		Task<ProductDto> GetProduct(string id);
-		Task UpdateProduct(Product productDto);
+		Task UpdateProduct(ProductDto productDto);
 	}
 }

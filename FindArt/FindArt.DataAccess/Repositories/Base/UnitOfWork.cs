@@ -10,6 +10,11 @@ namespace FindArt.DataAccess.Repositories.Base
 		private IAuctionRepository _auctionRepository;
 		private IOfferRepository _offerRepository;
 		private IProductRepository _productRepository;
+
+		public UnitOfWork(FindArtDbContext findArtDbContext)
+		{
+			_context = findArtDbContext;
+		}
 		public IAuctionRepository Auction => _auctionRepository ??= new AuctionRepository(_context);
 
 		public IOfferRepository Offer => _offerRepository ??= new OfferRepository(_context);

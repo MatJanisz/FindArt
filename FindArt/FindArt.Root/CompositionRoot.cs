@@ -9,6 +9,8 @@ using FindArt.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FindArt.Core.Interfaces.Repositories.Base;
+using FindArt.DataAccess.Repositories.Base;
 
 namespace FindArt.Root
 {
@@ -62,7 +64,10 @@ namespace FindArt.Root
 
         public static void InjectAllServices(this IServiceCollection services)
 		{
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IAuctionService, AuctionService>();
 		}
     }
 }

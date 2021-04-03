@@ -45,7 +45,7 @@ namespace FindArt.Services
 			await _unitOfWork.SaveAsync();
 		}
 
-		public async Task UpdateProduct(Product productDto)
+		public async Task UpdateProduct(ProductDto productDto)
 		{
 			var product = _mapper.Map<Product>(productDto);
 			_unitOfWork.Product.UpdateProduct(product);

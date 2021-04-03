@@ -17,8 +17,10 @@ namespace FindArt.Core
 		{
 			CreateMap<Product, ProductDto>()
 				.ForMember(dto => dto.OwnerEmail, p => p.MapFrom(x => x.Owner.Email))
-				.ForMember(dto => dto.ProductType, p => p.MapFrom(x => x.ProductTypeID.ToString()))
-				.ReverseMap();
+				.ForMember(dto => dto.ProductType, p => p.MapFrom(x => x.ProductTypeID.ToString()));
+
+			CreateMap<ProductDto, Product>()
+				.ForMember(p => p.ProductType, dto => dto.MapFrom(x => new ProductType(x.ProductType)));
 
 			CreateMap<Auction, AuctionDto>().ReverseMap();
 

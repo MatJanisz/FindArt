@@ -19,5 +19,10 @@ namespace FindArt.Core.Models
 		public ProductTypeID ProductTypeID { get; set; }
 		public string Name { get; set; }
 		public List<Product> Products { get; set; }
+		public ProductType() { }
+		public ProductType(string name)
+		{
+			Name = name;
+		}
 	}
 }
