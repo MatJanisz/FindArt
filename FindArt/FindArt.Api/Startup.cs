@@ -55,6 +55,8 @@ namespace FindArt.Api
                     s.RunDefaultMvcValidationAfterFluentValidationExecutes = false; 
                 })
 				.AddNewtonsoftJson();
+
+			services.ConfigureSwagger();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,6 +80,12 @@ namespace FindArt.Api
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
+			});
+
+			app.UseSwagger();
+			app.UseSwaggerUI(s =>
+			{
+				s.SwaggerEndpoint("/swagger/v1/swagger.json", "FindArt");
 			});
 		}
 	}

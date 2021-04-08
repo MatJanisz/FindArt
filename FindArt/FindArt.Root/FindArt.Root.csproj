@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FindArt.DataAccess\FindArt.DataAccess.csproj" />
     <ProjectReference Include="..\FindArt.Services\FindArt.Services.csproj" />
   </ItemGroup>
