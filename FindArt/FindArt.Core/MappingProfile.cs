@@ -16,13 +16,23 @@ namespace FindArt.Core
 		public MappingProfile()
 		{
 			CreateMap<Product, ProductDto>()
-				.ForMember(dto => dto.OwnerEmail, p => p.MapFrom(x => x.Owner.Email))
-				.ForMember(dto => dto.ProductType, p => p.MapFrom(x => x.ProductTypeID.ToString()));
+				.ForMember(destination => destination.OwnerEmail, p => p.MapFrom(source => source.Owner.Email))
+				.ForMember(dto => dto.ProductTypeName, p => p.MapFrom(x => x.ProductTypeID.ToString()));
 
-			CreateMap<ProductDto, Product>()
-				.ForMember(p => p.ProductType, dto => dto.MapFrom(x => new ProductType(x.ProductType)));
+			CreateMap<ProductCreationDto, Product>()
+				.ForMember(destination => destination.ProductTypeID, dto => dto.MapFrom(source => ProductType.GetProductTypeValueByName(source.ProductTypeName)));
 
-			CreateMap<Auction, AuctionDto>().ReverseMap();
+			CreateMap<ProductUpdateDto, Product>()
+				.ForMember(destination => destination.ProductTypeID, dto => dto.MapFrom(source => ProductType.GetProductTypeValueByName(source.ProductTypeName)));
+
+			CreateMap<Product, ProductUpdateDto>()
+				.ForMember(destination => destination.ProductTypeName, p => p.MapFrom(source => source.ProductType.Name));
+
+			CreateMap<Auction, AuctionDto>();
+
+			CreateMap<AuctionCreationDto, Auction>();
+
+			CreateMap<AuctionUpdateDto, Auction>().ReverseMap();
 
 			CreateMap<UserRegistrationDto, User>();
 

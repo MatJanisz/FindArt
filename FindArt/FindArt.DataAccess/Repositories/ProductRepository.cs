@@ -16,11 +16,14 @@ namespace FindArt.DataAccess
 
 		public async Task<IEnumerable<Product>> GetAllProductsAsync(bool trackChanges) =>
 			await FindAll(trackChanges)
+			.Include(p => p.Owner)
 			.OrderBy(p => p.Name)
 			.ToListAsync();
 
 		public async Task<Product> GetProductAsync(string id, bool trackChanges) =>
 			await FindByCondition(p => p.ID.Equals(id), trackChanges)
+			.Include(p => p.Owner)
+			.Include(p => p.ProductType)
 			.SingleOrDefaultAsync();
 
 		public void CreateProduct(Product product) => Create(product);

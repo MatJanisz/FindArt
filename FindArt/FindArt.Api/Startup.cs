@@ -1,6 +1,7 @@
 using FindArt.Api.Extensions;
 using FindArt.Core;
 using FindArt.Root;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +48,13 @@ namespace FindArt.Api
 
 			services.InjectAllServices();
 
-			services.AddControllers();
+			services.AddControllers()
+				.AddFluentValidation(s => 
+                { 
+                    s.RegisterValidatorsFromAssemblyContaining<Startup>(); 
+                    s.RunDefaultMvcValidationAfterFluentValidationExecutes = false; 
+                })
+				.AddNewtonsoftJson();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

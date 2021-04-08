@@ -9,6 +9,7 @@ namespace FindArt.DataAccess.Configuration
 		public void Configure(EntityTypeBuilder<Auction> modelBuilder)
 		{
 			modelBuilder.HasKey(b => b.AuctionID);
+			modelBuilder.Property(b => b.AuctionID).HasDefaultValueSql("NEWID()");
 			modelBuilder.Property(b => b.DueDate).IsRequired();
 			modelBuilder.Property(b => b.InitialPrice).IsRequired().HasColumnType("decimal(18,2)");
 

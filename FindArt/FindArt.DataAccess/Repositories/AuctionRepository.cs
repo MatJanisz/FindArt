@@ -24,13 +24,6 @@ namespace FindArt.DataAccess
 			.Include(p => p.Product)
 			.SingleOrDefaultAsync();
 
-		public void AssignProductToAuction(string productID, string auctionID)
-		{
-			var auction = FindByCondition(p => p.AuctionID.Equals(auctionID), true).Single();
-			auction.ProductID = productID;
-			Update(auction);
-		}
-
 		public void CreateAuction(Auction auction) => Create(auction);
 
 		public void DeleteAuction(Auction auction) => Delete(auction);

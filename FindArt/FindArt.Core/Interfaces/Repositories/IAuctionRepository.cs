@@ -9,7 +9,6 @@ namespace FindArt.Core.Interfaces.Repositories
 {
 	public interface IAuctionRepository
 	{
-		void AssignProductToAuction(string productID, string auctionID);
 		Task<IEnumerable<Auction>> GetAllAuctionsAsync(bool trackChanges);
 		Task<Auction> GetAuctionAsync(string id, bool trackChanges);
 		public void CreateAuction(Auction auction);

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FindArt.Core.DataTransferObjects.Product;
 using FindArt.Core.Interfaces.Services;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -32,7 +33,7 @@ namespace FindArt.Api.Controllers
 			return Ok(productsDto);
 		}
 
-		[HttpGet("{id}")]
+		[HttpGet("{id}", Name = ("GetProduct"))]
 		public async Task<IActionResult> GetProduct(string id)
 		{
 			var products = await _productService.GetProduct(id);
@@ -40,16 +41,30 @@ namespace FindArt.Api.Controllers
 		}
 
 		[HttpPost()]
-		public async Task<IActionResult> CreateProduct([FromBody] ProductDto productDto)
+		public async Task<IActionResult> CreateProduct([FromBody] ProductCreationDto productDto)
 		{
-			await _productService.CreateProduct(productDto);
-			return Ok();
+			var createdProduct = await _productService.CreateProduct(productDto);
+			return CreatedAtRoute("GetProduct", new { id = createdProduct.ID}, createdProduct);
 		}
 
-		[HttpPut()]
-		public async Task<IActionResult> UpdateProduct([FromBody] ProductDto productDto)
+		[HttpPut("{id}")]
+		public async Task<IActionResult> UpdateProduct(string id, [FromBody] ProductUpdateDto productDto)
 		{
-			await _productService.UpdateProduct(productDto);
+			await _productService.UpdateProduct(id, productDto);
+			return NoContent();
+		}
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteProduct(string id)
+		{
+			await _productService.DeleteProduct(id);
+			return NoContent();
+		}
+
+		[HttpPatch("{id}")]
+		public async Task<IActionResult> PartiallyUpdate(string id, [FromBody] JsonPatchDocument<ProductUpdateDto> patchProductDto)
+		{
+			await _productService.PartiallyUpdateProduct(id, patchProductDto);
 			return NoContent();
 		}
 

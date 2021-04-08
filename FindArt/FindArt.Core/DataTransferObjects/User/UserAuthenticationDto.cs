@@ -1,9 +1,8 @@
-﻿
+﻿using FindArt.Core.DataTransferObjects.User.Base;
+
 namespace FindArt.Core.DataTransferObjects.User
 {
-	public class UserAuthenticationDto
+	public class UserAuthenticationDto : UserBaseDto
 	{
-		public string UserName { get; set; }
-		public string Password { get; set; }
 	}
 }

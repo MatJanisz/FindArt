@@ -14,6 +14,7 @@ namespace FindArt.DataAccess.Configuration
 		public void Configure(EntityTypeBuilder<Product> modelBuilder)
 		{
 			modelBuilder.HasKey(b => b.ID);
+			modelBuilder.Property(b => b.ID).HasDefaultValueSql("NEWID()");
 			modelBuilder.Property(b => b.Name).IsRequired();
 			modelBuilder.Property(b => b.Description).IsRequired();
 

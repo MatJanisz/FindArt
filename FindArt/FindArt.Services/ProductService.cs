@@ -3,6 +3,7 @@ using FindArt.Core.DataTransferObjects.Product;
 using FindArt.Core.Interfaces.Repositories.Base;
 using FindArt.Core.Interfaces.Services;
 using FindArt.Core.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -38,23 +39,38 @@ namespace FindArt.Services
 			return _mapper.Map<ProductDto>(product);
 		}
 
-		public async Task CreateProduct(ProductDto productDto)
+		public async Task<ProductDto> CreateProduct(ProductCreationDto productDto)
 		{
 			var product = _mapper.Map<Product>(productDto);
 			_unitOfWork.Product.CreateProduct(product);
 			await _unitOfWork.SaveAsync();
+			product = await _unitOfWork.Product.GetProductAsync(product.ID, false);
+			return _mapper.Map<ProductDto>(product);
 		}
 
-		public async Task UpdateProduct(ProductDto productDto)
+		public async Task UpdateProduct(string id, ProductUpdateDto productDto)
 		{
 			var product = _mapper.Map<Product>(productDto);
+			var productDb = await _unitOfWork.Product.GetProductAsync(id, false);
+			product.ID = id;
+			product.AuctionID = productDb.AuctionID;
 			_unitOfWork.Product.UpdateProduct(product);
 			await _unitOfWork.SaveAsync();
 		}
 
-		public async Task DeleteProduct(Product productDto)
+		public async Task PartiallyUpdateProduct(string id, JsonPatchDocument<ProductUpdateDto> patchProductDto)
 		{
-			var product = _mapper.Map<Product>(productDto);
+			var productDb = await _unitOfWork.Product.GetProductAsync(id, false);
+			var productToPatch = _mapper.Map<ProductUpdateDto>(productDb);
+			patchProductDto.ApplyTo(productToPatch);
+			productDb = _mapper.Map(productToPatch, productDb);
+			_unitOfWork.Product.UpdateProduct(productDb);
+			await _unitOfWork.SaveAsync();
+		}
+
+		public async Task DeleteProduct(string id)
+		{
+			var product = await _unitOfWork.Product.GetProductAsync(id, true);
 			_unitOfWork.Product.DeleteProduct(product);
 			await _unitOfWork.SaveAsync();
 		}
