@@ -48,6 +48,8 @@ namespace FindArt.Api
 
 			services.InjectAllServices();
 
+			services.InjectAllActionFilters();
+
 			services.AddControllers()
 				.AddFluentValidation(s => 
                 { 

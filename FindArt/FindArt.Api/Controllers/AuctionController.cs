@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using FindArt.Core.DataTransferObjects.Auction;
 using FindArt.Core.Interfaces.Services;
+using FindArt.Core.RequestFeatures;
+using FindArt.Services.ActionFilters;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,18 +30,20 @@ namespace FindArt.Api.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetAuctions()
+		public async Task<IActionResult> GetAuctions([FromQuery] AuctionParameters auctionParameters)
 		{
-			var auctions = await _auctionService.GetAllAuctions();
-			var auctionsDto = _mapper.Map<IEnumerable<AuctionDto>>(auctions);
-			return Ok(auctionsDto);
+			var auctionDtos = await _auctionService.GetAllAuctions(auctionParameters);
+			Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(auctionDtos.MetaData));
+			return Ok(auctionDtos);
 		}
 
 		[HttpGet("{id}", Name = ("GetAuction"))]
+		[ServiceFilter(typeof(ValidateAuctionExistsAttribute))]
 		public async Task<IActionResult> GetAuction(string id)
 		{
-			var auctions = await _auctionService.GetAuction(id);
-			return Ok(auctions);
+			var auction = HttpContext.Items["auction"] as AuctionDto;
+
+			return Ok(auction);
 		}
 
 		[HttpPost()]
@@ -49,23 +54,27 @@ namespace FindArt.Api.Controllers
 		}
 
 		[HttpPatch("{id}")]
+		[ServiceFilter(typeof(ValidateAuctionExistsAttribute))]
 		public async Task<IActionResult> PartiallyUpdate(string id, [FromBody] JsonPatchDocument<AuctionUpdateDto> patchAuctionDto)
 		{
 			await _auctionService.PartiallyUpdateAuction(id, patchAuctionDto);
 			return NoContent();
 		}
 
-		[HttpPut("{auctionId}")]
-		public async Task<IActionResult> AssignProductToAuction(string auctionId, AuctionUpdateDto auctionUpdateDto)
+		[HttpPut("{id}")]
+		[ServiceFilter(typeof(ValidateAuctionExistsAttribute))]
+		public async Task<IActionResult> AssignProductToAuction(string id, AuctionUpdateDto auctionUpdateDto)
 		{
-			await _auctionService.AssignProductToAuction(auctionId, auctionUpdateDto.ProductID);
+			await _auctionService.AssignProductToAuction(id, auctionUpdateDto.ProductID);
 			return NoContent();
 		}
 
 		[HttpDelete("{id}")]
+		[ServiceFilter(typeof(ValidateAuctionExistsAttribute))]
 		public async Task<IActionResult> DeleteProduct(string id)
 		{
-			await _auctionService.DeleteAuction(id);
+			var auction = HttpContext.Items["auction"] as AuctionDto;
+			await _auctionService.DeleteAuction(auction);
 			return NoContent();
 		}
 

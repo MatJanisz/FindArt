@@ -3,6 +3,7 @@ using FindArt.Core.DataTransferObjects.Product;
 using FindArt.Core.Interfaces.Repositories.Base;
 using FindArt.Core.Interfaces.Services;
 using FindArt.Core.Models;
+using FindArt.Core.RequestFeatures;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using System;
@@ -27,10 +28,11 @@ namespace FindArt.Services
 			_logger = logger;
 		}
 
-		public async Task<IEnumerable<ProductDto>> GetAllProduct()
+		public async Task<PagedList<ProductDto>> GetAllProducts(ProductParameters productParameters)
 		{
-			var products = await _unitOfWork.Product.GetAllProductsAsync(trackChanges: false);
-			return _mapper.Map<IEnumerable<ProductDto>>(products);
+			var products = await _unitOfWork.Product.GetAllProductsAsync(productParameters, trackChanges: false);
+			var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products).ToList();
+			return new PagedList<ProductDto>(productDtos, products.MetaData);
 		}
 
 		public async Task<ProductDto> GetProduct(string id)
@@ -68,9 +70,9 @@ namespace FindArt.Services
 			await _unitOfWork.SaveAsync();
 		}
 
-		public async Task DeleteProduct(string id)
+		public async Task DeleteProduct(ProductDto productDto)
 		{
-			var product = await _unitOfWork.Product.GetProductAsync(id, true);
+			var product = _mapper.Map<Product>(productDto);
 			_unitOfWork.Product.DeleteProduct(product);
 			await _unitOfWork.SaveAsync();
 		}

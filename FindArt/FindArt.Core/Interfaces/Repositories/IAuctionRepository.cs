@@ -1,4 +1,5 @@
 ﻿using FindArt.Core.Models;
+using FindArt.Core.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace FindArt.Core.Interfaces.Repositories
 {
 	public interface IAuctionRepository
 	{
-		Task<IEnumerable<Auction>> GetAllAuctionsAsync(bool trackChanges);
+		Task<PagedList<Auction>> GetAllAuctionsAsync(AuctionParameters auctionParameters, bool trackChanges);
 		Task<Auction> GetAuctionAsync(string id, bool trackChanges);
 		public void CreateAuction(Auction auction);
 

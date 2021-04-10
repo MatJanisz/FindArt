@@ -1,5 +1,6 @@
 ﻿using FindArt.Core.Interfaces.Repositories;
 using FindArt.Core.Models;
+using FindArt.Core.RequestFeatures;
 using FindArt.DataAccess.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -14,10 +15,16 @@ namespace FindArt.DataAccess
 		{
 		}
 
-		public async Task<IEnumerable<Auction>> GetAllAuctionsAsync(bool trackChanges) =>
-			await FindAll(trackChanges)
+		public async Task<PagedList<Auction>> GetAllAuctionsAsync(AuctionParameters auctionParameters, bool trackChanges)
+		{
+			var auctions = await FindAll(trackChanges)
 			.OrderBy(a => a.DueDate)
 			.ToListAsync();
+
+			return PagedList<Auction>
+				.ToPagedList(auctions, auctionParameters.PageNumber, auctionParameters.PageSize);
+		}
+
 
 		public async Task<Auction> GetAuctionAsync(string id, bool trackChanges) =>
 			await FindByCondition(p => p.AuctionID.Equals(id), trackChanges)

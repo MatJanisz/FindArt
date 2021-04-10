@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using FindArt.Core.DataTransferObjects.Product;
 using FindArt.Core.Interfaces.Services;
+using FindArt.Core.RequestFeatures;
+using FindArt.Services.ActionFilters;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FindArt.Api.Controllers
@@ -26,18 +27,20 @@ namespace FindArt.Api.Controllers
 			_mapper = mapper;
 		}
 		[HttpGet]
-		public async Task<IActionResult> GetProducts()
+		public async Task<IActionResult> GetProducts([FromQuery] ProductParameters productParameters)
 		{
-			var products = await _productService.GetAllProduct();
-			var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products);
+			var productsDto = await _productService.GetAllProducts(productParameters);
+			Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(productsDto.MetaData));
 			return Ok(productsDto);
 		}
 
 		[HttpGet("{id}", Name = ("GetProduct"))]
-		public async Task<IActionResult> GetProduct(string id)
+		[ServiceFilter(typeof(ValidateProductExistsAttribute))]
+		public IActionResult GetProduct(string id)
 		{
-			var products = await _productService.GetProduct(id);
-			return Ok(products);
+			var product = HttpContext.Items["product"] as ProductDto;
+
+			return Ok(product);
 		}
 
 		[HttpPost()]
@@ -48,20 +51,24 @@ namespace FindArt.Api.Controllers
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateProduct(string id, [FromBody] ProductUpdateDto productDto)
+		[ServiceFilter(typeof(ValidateProductExistsAttribute))]
+		public async Task<IActionResult> UpdateProduct(string id, [FromBody] ProductUpdateDto productUpdateDto)
 		{
-			await _productService.UpdateProduct(id, productDto);
+			await _productService.UpdateProduct(id, productUpdateDto);
 			return NoContent();
 		}
 
 		[HttpDelete("{id}")]
+		[ServiceFilter(typeof(ValidateProductExistsAttribute))]
 		public async Task<IActionResult> DeleteProduct(string id)
 		{
-			await _productService.DeleteProduct(id);
+			var product = HttpContext.Items["product"] as ProductDto;
+			await _productService.DeleteProduct(product);
 			return NoContent();
 		}
 
 		[HttpPatch("{id}")]
+		[ServiceFilter(typeof(ValidateProductExistsAttribute))]
 		public async Task<IActionResult> PartiallyUpdate(string id, [FromBody] JsonPatchDocument<ProductUpdateDto> patchProductDto)
 		{
 			await _productService.PartiallyUpdateProduct(id, patchProductDto);

@@ -13,6 +13,7 @@ using FindArt.Core.Interfaces.Repositories.Base;
 using FindArt.DataAccess.Repositories.Base;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using FindArt.Services.ActionFilters;
 
 namespace FindArt.Root
 {
@@ -104,5 +105,11 @@ namespace FindArt.Root
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IAuctionService, AuctionService>();
 		}
+
+        public static void InjectAllActionFilters(this IServiceCollection services)
+		{
+            services.AddScoped<ValidateProductExistsAttribute>();
+            services.AddScoped<ValidateAuctionExistsAttribute>();
+        }
     }
 }

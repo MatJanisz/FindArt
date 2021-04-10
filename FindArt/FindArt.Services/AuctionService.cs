@@ -3,9 +3,11 @@ using FindArt.Core.DataTransferObjects.Auction;
 using FindArt.Core.Interfaces.Repositories.Base;
 using FindArt.Core.Interfaces.Services;
 using FindArt.Core.Models;
+using FindArt.Core.RequestFeatures;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FindArt.Services
@@ -23,16 +25,17 @@ namespace FindArt.Services
 			_logger = logger;
 		}
 
-		public async Task<IEnumerable<AuctionDto>> GetAllAuctions()
+		public async Task<PagedList<AuctionDto>> GetAllAuctions(AuctionParameters auctionParameters)
 		{
-			var products = await _unitOfWork.Auction.GetAllAuctionsAsync(trackChanges: false);
-			return _mapper.Map<IEnumerable<AuctionDto>>(products);
+			var auctions = await _unitOfWork.Auction.GetAllAuctionsAsync(auctionParameters, trackChanges: false);
+			var auctionDtos = _mapper.Map<IEnumerable<AuctionDto>>(auctions).ToList();
+			return new PagedList<AuctionDto>(auctionDtos, auctions.MetaData);
 		}
 
 		public async Task<AuctionDto> GetAuction(string id)
 		{
-			var product = await _unitOfWork.Auction.GetAuctionAsync(id, trackChanges: false);
-			return _mapper.Map<AuctionDto>(product);
+			var auction = await _unitOfWork.Auction.GetAuctionAsync(id, trackChanges: false);
+			return _mapper.Map<AuctionDto>(auction);
 		}
 
 		public async Task AssignProductToAuction(string auctionID, string productID)
@@ -73,10 +76,10 @@ namespace FindArt.Services
 			await _unitOfWork.SaveAsync();
 		}
 
-		public async Task DeleteAuction(string id)
+		public async Task DeleteAuction(AuctionDto auctionDto)
 		{
-			var product = await _unitOfWork.Auction.GetAuctionAsync(id, true);
-			_unitOfWork.Auction.DeleteAuction(product);
+			var auction = _mapper.Map<Auction>(auctionDto);
+			_unitOfWork.Auction.DeleteAuction(auction);
 			await _unitOfWork.SaveAsync();
 		}
 	}

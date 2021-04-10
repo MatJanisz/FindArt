@@ -17,13 +17,16 @@ namespace FindArt.Core
 		{
 			CreateMap<Product, ProductDto>()
 				.ForMember(destination => destination.OwnerEmail, p => p.MapFrom(source => source.Owner.Email))
-				.ForMember(dto => dto.ProductTypeName, p => p.MapFrom(x => x.ProductTypeID.ToString()));
+				.ForMember(dto => dto.ProductTypeName, p => p.MapFrom(x => x.ProductTypeID.ToString()))
+				.ReverseMap();
 
 			CreateMap<ProductCreationDto, Product>()
 				.ForMember(destination => destination.ProductTypeID, dto => dto.MapFrom(source => ProductType.GetProductTypeValueByName(source.ProductTypeName)));
 
 			CreateMap<ProductUpdateDto, Product>()
-				.ForMember(destination => destination.ProductTypeID, dto => dto.MapFrom(source => ProductType.GetProductTypeValueByName(source.ProductTypeName)));
+				.ForMember(destination => destination.ProductTypeID, dto => dto.MapFrom(source => ProductType.GetProductTypeValueByName(source.ProductTypeName)))
+				.ForMember(destination => destination.ID, dto => dto.Ignore())
+				.ForMember(destination => destination.AuctionID, dto => dto.Ignore());
 
 			CreateMap<Product, ProductUpdateDto>()
 				.ForMember(destination => destination.ProductTypeName, p => p.MapFrom(source => source.ProductType.Name));
