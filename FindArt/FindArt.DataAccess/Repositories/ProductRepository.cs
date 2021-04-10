@@ -2,6 +2,7 @@
 using FindArt.Core.Models;
 using FindArt.Core.RequestFeatures;
 using FindArt.DataAccess.Repositories.Base;
+using FindArt.DataAccess.Repositories.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,9 @@ namespace FindArt.DataAccess
 
 		public async Task<PagedList<Product>> GetAllProductsAsync(ProductParameters productParameters, bool trackChanges)
 		{
-			var products = await FindAll(trackChanges)
+			var products = await FindByCondition(p => p.ProductType.Name == productParameters.ProductTypeName, trackChanges)
 			.Include(p => p.Owner)
-			.OrderBy(p => p.Name)
+			.Sort(productParameters.OrderBy)
 			.ToListAsync();
 
 			return PagedList<Product>

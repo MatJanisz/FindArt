@@ -8,5 +8,7 @@ namespace FindArt.Core.RequestFeatures
 {
 	public class AuctionParameters : RequestParameters
 	{
+		//used in filtering
+		public bool Active { get; set; } = true;
 	}
 }

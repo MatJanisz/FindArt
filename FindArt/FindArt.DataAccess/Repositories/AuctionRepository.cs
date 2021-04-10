@@ -2,6 +2,7 @@
 using FindArt.Core.Models;
 using FindArt.Core.RequestFeatures;
 using FindArt.DataAccess.Repositories.Base;
+using FindArt.DataAccess.Repositories.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,8 @@ namespace FindArt.DataAccess
 
 		public async Task<PagedList<Auction>> GetAllAuctionsAsync(AuctionParameters auctionParameters, bool trackChanges)
 		{
-			var auctions = await FindAll(trackChanges)
-			.OrderBy(a => a.DueDate)
+			var auctions = await FindByCondition(p => p.Active == auctionParameters.Active, trackChanges)
+			.Sort(auctionParameters.OrderBy)
 			.ToListAsync();
 
 			return PagedList<Auction>

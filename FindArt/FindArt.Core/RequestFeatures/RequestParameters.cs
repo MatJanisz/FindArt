@@ -23,9 +23,7 @@ namespace FindArt.Core.RequestFeatures
                 _pageSize = (value > maxPageSize) ? maxPageSize : value;
             }
         }
-
+        //used in sorting
         public string OrderBy { get; set; }
-
-        public string Fields { get; set; }
     }
 }

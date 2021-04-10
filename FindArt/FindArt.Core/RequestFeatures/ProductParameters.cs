@@ -8,5 +8,7 @@ namespace FindArt.Core.RequestFeatures
 {
 	public class ProductParameters : RequestParameters
 	{
+		//used in filtering
+		public string ProductTypeName { get; set; }
 	}
 }
