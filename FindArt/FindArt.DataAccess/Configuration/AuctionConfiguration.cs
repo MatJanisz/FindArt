@@ -12,6 +12,7 @@ namespace FindArt.DataAccess.Configuration
 			modelBuilder.Property(b => b.AuctionID).HasDefaultValueSql("NEWID()");
 			modelBuilder.Property(b => b.DueDate).IsRequired();
 			modelBuilder.Property(b => b.InitialPrice).IsRequired().HasColumnType("decimal(18,2)");
+			modelBuilder.Property(b => b.Active).HasDefaultValue(true);
 
 			//one to one relation between Auction and Product
 			modelBuilder
