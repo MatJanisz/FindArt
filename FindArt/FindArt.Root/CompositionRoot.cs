@@ -111,5 +111,10 @@ namespace FindArt.Root
             services.AddScoped<ValidateProductExistsAttribute>();
             services.AddScoped<ValidateAuctionExistsAttribute>();
         }
+
+        public static void ConfigureResponseCaching(this IServiceCollection services)
+		{
+            services.AddResponseCaching();
+        }
     }
 }

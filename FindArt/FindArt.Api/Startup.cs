@@ -50,12 +50,17 @@ namespace FindArt.Api
 
 			services.InjectAllActionFilters();
 
-			services.AddControllers()
+			services.ConfigureResponseCaching();
+
+			services.AddControllers(config =>
+				{
+					config.CacheProfiles.Add("120SecondsDuration", new CacheProfile { Duration = 120 });
+				})
 				.AddFluentValidation(s => 
-                { 
-                    s.RegisterValidatorsFromAssemblyContaining<Startup>(); 
-                    s.RunDefaultMvcValidationAfterFluentValidationExecutes = false; 
-                })
+				{ 
+					s.RegisterValidatorsFromAssemblyContaining<Startup>(); 
+					s.RunDefaultMvcValidationAfterFluentValidationExecutes = false; 
+				})
 				.AddNewtonsoftJson();
 
 			services.ConfigureSwagger();
@@ -72,6 +77,8 @@ namespace FindArt.Api
 			app.ConfigureExceptionHandler();
 
 			app.UseCors("CorsPolicy");
+
+			app.UseResponseCaching();
 
 			app.UseRouting();
 

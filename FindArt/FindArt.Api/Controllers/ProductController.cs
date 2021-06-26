@@ -14,6 +14,7 @@ namespace FindArt.Api.Controllers
 {
 	[Route("api/product")]
 	[ApiController]
+	[ResponseCache(CacheProfileName = "120SecondsDuration")]
 	public class ProductController : ControllerBase
 	{
 		private readonly IProductService _productService;
@@ -27,6 +28,7 @@ namespace FindArt.Api.Controllers
 			_mapper = mapper;
 		}
 		[HttpGet]
+		[ResponseCache(Duration = 60)] //adds cache-control header - 60s. It has higher priority than controller's cache
 		public async Task<IActionResult> GetProducts([FromQuery] ProductParameters productParameters)
 		{
 			var productsDto = await _productService.GetAllProducts(productParameters);
